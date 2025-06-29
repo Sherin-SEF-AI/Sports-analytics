@@ -2,6 +2,9 @@
 
 A comprehensive sports analytics platform that provides real-time player and ball tracking, tactical analysis, performance feedback, and automated refereeing assistance for live sports events and uploaded video files.
 
+![Screenshot from 2025-06-29 17-13-54](https://github.com/user-attachments/assets/d8b1c167-5459-4f91-a299-0f533d0e6a1c)
+
+
 ## Features
 
 ### 🎯 Real-Time Player Tracking
