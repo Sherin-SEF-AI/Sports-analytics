@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Analytics Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border: none;
+            border-radius: 25px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .stats-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .stats-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .video-container {
+            background: #2c3e50;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .video-placeholder {
+            background: #34495e;
+            border-radius: 10px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .analysis-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .progress {
+            border-radius: 10px;
+            height: 10px;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+        }
+        
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Header -->
+            <div class="header">
+                <h1><i class="fas fa-futbol"></i> Sports Analytics Platform</h1>
+                <p>Real-time player tracking, tactical analysis, and performance insights</p>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="row">
+                <!-- Left Column - Video and Controls -->
+                <div class="col-lg-8">
+                    <!-- Video Display -->
+                    <div class="video-container">
+                        <h4 class="text-white mb-3"><i class="fas fa-video"></i> Live Analysis</h4>
+                        <div class="video-placeholder" id="videoDisplay">
+                            <div class="text-center">
+                                <i class="fas fa-play-circle fa-3x mb-3"></i>
+                                <p>Video feed will appear here</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Control Panel -->
+                    <div class="analysis-panel">
+                        <h5><i class="fas fa-cogs"></i> Analysis Controls</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-primary w-100 mb-2" id="startLiveBtn">
+                                    <i class="fas fa-play"></i> Start Live Analysis
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-secondary w-100 mb-2" id="stopAnalysisBtn">
+                                    <i class="fas fa-stop"></i> Stop Analysis
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Analysis Request Buttons -->
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <button class="btn btn-info w-100 mb-2" id="getTacticalBtn" disabled>
+                                    <i class="fas fa-chess"></i> Get Tactical Insights
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-warning w-100 mb-2" id="getPerformanceBtn" disabled>
+                                    <i class="fas fa-tachometer-alt"></i> Get Performance Metrics
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Advanced Analytics Buttons -->
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <button class="btn btn-success w-100 mb-2" id="getAdvancedBtn" disabled>
+                                    <i class="fas fa-brain"></i> Advanced Analytics
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary w-100 mb-2" id="getPredictionBtn" disabled>
+                                    <i class="fas fa-chart-line"></i> Predictions
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- File Upload -->
+                        <div class="mt-3">
+                            <label for="videoUpload" class="form-label">Upload Video File</label>
+                            <input type="file" class="form-control" id="videoUpload" accept="video/*">
+                            <button class="btn btn-success w-100 mt-2" id="uploadBtn">
+                                <i class="fas fa-upload"></i> Upload & Analyze
+                            </button>
+                        </div>
+                        
+                        <!-- Progress Bar -->
+                        <div class="mt-3" id="progressContainer" style="display: none;">
+                            <div class="progress">
+                                <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted" id="progressText">Processing...</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Analytics Dashboard -->
+                <div class="col-lg-4">
+                    <!-- Real-time Stats -->
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="stats-card">
+                                <div class="stats-number" id="playerCount">0</div>
+                                <div class="stats-label">Players</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stats-card">
+                                <div class="stats-number" id="fpsDisplay">0</div>
+                                <div class="stats-label">FPS</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Analysis Results -->
+                    <div class="analysis-panel">
+                        <h5><i class="fas fa-chart-line"></i> Live Metrics</h5>
+                        <div id="liveMetrics">
+                            <p class="text-muted">Metrics will appear here during analysis</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Tactical Insights -->
+                    <div class="analysis-panel">
+                        <h5><i class="fas fa-chess"></i> Tactical Analysis</h5>
+                        <div id="tacticalInsights">
+                            <p class="text-muted">Tactical insights will appear here</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Performance Metrics -->
+                    <div class="analysis-panel">
+                        <h5><i class="fas fa-tachometer-alt"></i> Performance</h5>
+                        <div id="performanceMetrics">
+                            <p class="text-muted">Performance data will appear here</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Advanced Analytics -->
+                    <div class="analysis-panel">
+                        <h5><i class="fas fa-brain"></i> Advanced Analytics</h5>
+                        <div id="advancedAnalytics">
+                            <p class="text-muted">Advanced analytics will appear here</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Predictions -->
+                    <div class="analysis-panel">
+                        <h5><i class="fas fa-chart-line"></i> Predictions</h5>
+                        <div id="predictions">
+                            <p class="text-muted">Performance predictions will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Status Messages -->
+            <div id="statusMessages"></div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        // Initialize Socket.IO connection
+        const socket = io('http://localhost:5000');
+        
+        // DOM elements
+        const videoDisplay = document.getElementById('videoDisplay');
+        const startLiveBtn = document.getElementById('startLiveBtn');
+        const stopAnalysisBtn = document.getElementById('stopAnalysisBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const videoUpload = document.getElementById('videoUpload');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const playerCount = document.getElementById('playerCount');
+        const fpsDisplay = document.getElementById('fpsDisplay');
+        const liveMetrics = document.getElementById('liveMetrics');
+        const tacticalInsights = document.getElementById('tacticalInsights');
+        const performanceMetrics = document.getElementById('performanceMetrics');
+        const statusMessages = document.getElementById('statusMessages');
+        const getTacticalBtn = document.getElementById('getTacticalBtn');
+        const getPerformanceBtn = document.getElementById('getPerformanceBtn');
+        const getAdvancedBtn = document.getElementById('getAdvancedBtn');
+        const getPredictionBtn = document.getElementById('getPredictionBtn');
+        const advancedAnalytics = document.getElementById('advancedAnalytics');
+        const predictions = document.getElementById('predictions');
+        
+        let currentSessionId = null;
+        
+        // Socket event handlers
+        socket.on('connect', () => {
+            showStatus('Connected to server', 'success');
+        });
+        
+        socket.on('disconnect', () => {
+            showStatus('Disconnected from server', 'warning');
+        });
+        
+        socket.on('connected', (data) => {
+            console.log('Connected:', data);
+        });
+        
+        socket.on('analysis_started', (data) => {
+            currentSessionId = data.session_id;
+            showStatus(`Analysis started: ${data.session_id}`, 'success');
+            updateButtonStates(true);
+        });
+        
+        socket.on('analysis_stopped', (data) => {
+            showStatus(`Analysis stopped: ${data.session_id}`, 'info');
+            updateButtonStates(false);
+            currentSessionId = null;
+        });
+        
+        socket.on('frame_data', (data) => {
+            updateVideoDisplay(data.frame);
+            updateMetrics(data.analysis);
+            
+            if (data.progress !== undefined) {
+                updateProgress(data.progress, data.current_frame, data.total_frames);
+            }
+        });
+        
+        socket.on('tactical_insights', (data) => {
+            updateTacticalInsights(data);
+        });
+        
+        socket.on('performance_metrics', (data) => {
+            updatePerformanceMetrics(data);
+        });
+        
+        socket.on('advanced_analytics', (data) => {
+            updateAdvancedAnalytics(data);
+        });
+        
+        socket.on('prediction_analysis', (data) => {
+            updatePredictions(data);
+        });
+        
+        socket.on('error', (data) => {
+            showStatus(`Error: ${data.message}`, 'danger');
+        });
+        
+        // Button event handlers
+        startLiveBtn.addEventListener('click', () => {
+            socket.emit('start_live_analysis', { camera_index: 0 });
+        });
+        
+        stopAnalysisBtn.addEventListener('click', () => {
+            if (currentSessionId) {
+                socket.emit('stop_analysis', { session_id: currentSessionId });
+            }
+        });
+        
+        uploadBtn.addEventListener('click', () => {
+            const file = videoUpload.files[0];
+            if (!file) {
+                showStatus('Please select a video file', 'warning');
+                return;
+            }
+            
+            uploadVideo(file);
+        });
+        
+        getTacticalBtn.addEventListener('click', () => {
+            if (currentSessionId) {
+                socket.emit('get_tactical_insights', { session_id: currentSessionId });
+                showStatus('Requesting tactical insights...', 'info');
+            }
+        });
+        
+        getPerformanceBtn.addEventListener('click', () => {
+            if (currentSessionId) {
+                socket.emit('get_performance_metrics', { session_id: currentSessionId });
+                showStatus('Requesting performance metrics...', 'info');
+            }
+        });
+        
+        getAdvancedBtn.addEventListener('click', () => {
+            if (currentSessionId) {
+                socket.emit('get_advanced_analytics', { session_id: currentSessionId });
+                showStatus('Requesting advanced analytics...', 'info');
+            }
+        });
+        
+        getPredictionBtn.addEventListener('click', () => {
+            if (currentSessionId) {
+                socket.emit('get_predictions', { session_id: currentSessionId });
+                showStatus('Requesting predictions...', 'info');
+            }
+        });
+        
+        // Functions
+        function updateVideoDisplay(frameData) {
+            if (frameData) {
+                videoDisplay.innerHTML = `
+                    <img src="data:image/jpeg;base64,${frameData}" 
+                         alt="Live Video" 
+                         style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">
+                `;
+            }
+        }
+        
+        function updateMetrics(analysis) {
+            if (analysis) {
+                playerCount.textContent = analysis.player_count || 0;
+                fpsDisplay.textContent = analysis.fps ? analysis.fps.toFixed(1) : 0;
+                
+                liveMetrics.innerHTML = `
+                    <div class="row">
+                        <div class="col-6">
+                            <strong>Players:</strong> ${analysis.player_count || 0}
+                        </div>
+                        <div class="col-6">
+                            <strong>Ball:</strong> ${analysis.ball_detected ? 'Yes' : 'No'}
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-6">
+                            <strong>Frame:</strong> ${analysis.frame_number || 0}
+                        </div>
+                        <div class="col-6">
+                            <strong>FPS:</strong> ${analysis.fps ? analysis.fps.toFixed(1) : 0}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function updateProgress(progress, current, total) {
+            progressContainer.style.display = 'block';
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `Processing: ${current}/${total} frames (${progress.toFixed(1)}%)`;
+            
+            if (progress >= 100) {
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                }, 2000);
+            }
+        }
+        
+        function updateTacticalInsights(data) {
+            if (data && data.formation) {
+                tacticalInsights.innerHTML = `
+                    <div class="alert alert-info">
+                        <strong>Formation:</strong> ${data.formation.formation}<br>
+                        <strong>Confidence:</strong> ${(data.formation.confidence * 100).toFixed(1)}%<br>
+                        <strong>Defenders:</strong> ${data.formation.defenders}<br>
+                        <strong>Midfielders:</strong> ${data.formation.midfielders}<br>
+                        <strong>Forwards:</strong> ${data.formation.forwards}
+                    </div>
+                `;
+            } else if (data && data.spacing) {
+                tacticalInsights.innerHTML = `
+                    <div class="alert alert-info">
+                        <strong>Player Spacing:</strong><br>
+                        <strong>Average Distance:</strong> ${data.spacing.average_distance?.toFixed(1) || 0}px<br>
+                        <strong>Spacing Efficiency:</strong> ${(data.spacing.spacing_efficiency * 100).toFixed(1)}%
+                    </div>
+                `;
+            } else {
+                tacticalInsights.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle"></i> No tactical data available yet. 
+                        Start analysis and click "Get Tactical Insights" to see formation and spacing analysis.
+                    </div>
+                `;
+            }
+        }
+        
+        function updatePerformanceMetrics(data) {
+            if (data && data.individual_metrics) {
+                const playerCount = Object.keys(data.individual_metrics).length;
+                const teamMetrics = data.team_metrics || {};
+                
+                let metricsHtml = `
+                    <div class="alert alert-success">
+                        <strong>Active Players:</strong> ${playerCount}<br>
+                        <strong>Team Work Rate:</strong> ${teamMetrics.team_work_rate?.toFixed(0) || 0} pixels/min<br>
+                        <strong>Average Speed:</strong> ${teamMetrics.average_speed?.toFixed(1) || 0} px/s<br>
+                        <strong>Total Sprints:</strong> ${teamMetrics.total_sprints || 0}
+                    </div>
+                `;
+                
+                // Add individual player metrics if available
+                if (playerCount > 0) {
+                    metricsHtml += '<div class="mt-2"><strong>Player Details:</strong></div>';
+                    Object.entries(data.individual_metrics).forEach(([playerId, metrics]) => {
+                        metricsHtml += `
+                            <div class="small text-muted mt-1">
+                                ${playerId}: ${metrics.total_distance?.toFixed(0) || 0}px, 
+                                ${metrics.sprint_count || 0} sprints
+                            </div>
+                        `;
+                    });
+                }
+                
+                performanceMetrics.innerHTML = metricsHtml;
+            } else {
+                performanceMetrics.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle"></i> No performance data available yet. 
+                        Start analysis and click "Get Performance Metrics" to see player and team statistics.
+                    </div>
+                `;
+            }
+        }
+        
+        function updateAdvancedAnalytics(data) {
+            if (data) {
+                let html = '<div class="row">';
+                
+                // Clustering Analysis
+                if (data.clustering) {
+                    html += `
+                        <div class="col-12 mb-2">
+                            <div class="alert alert-info">
+                                <strong>Player Clustering:</strong><br>
+                                <small>Silhouette Score: ${(data.clustering.silhouette_score * 100).toFixed(1)}%</small><br>
+                                <small>Clusters Found: ${Object.keys(data.clustering.cluster_analysis).length}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Anomaly Detection
+                if (data.anomalies) {
+                    html += `
+                        <div class="col-12 mb-2">
+                            <div class="alert alert-warning">
+                                <strong>Anomaly Detection:</strong><br>
+                                <small>Anomalies Found: ${data.anomalies.anomaly_count}/${data.anomalies.total_players}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Team Synchronization
+                if (data.team_synchronization) {
+                    const sync = data.team_synchronization;
+                    html += `
+                        <div class="col-12 mb-2">
+                            <div class="alert alert-success">
+                                <strong>Team Synchronization:</strong><br>
+                                <small>Spread Consistency: ${(sync.spread_consistency * 100).toFixed(1)}%</small><br>
+                                <small>Compactness: ${sync.team_compactness_trend}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += '</div>';
+                advancedAnalytics.innerHTML = html;
+            } else {
+                advancedAnalytics.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle"></i> No advanced analytics data available yet. 
+                        Start analysis and click "Advanced Analytics" to see clustering, anomalies, and team synchronization.
+                    </div>
+                `;
+            }
+        }
+        
+        function updatePredictions(data) {
+            if (data && data.predictions) {
+                let html = '<div class="row">';
+                
+                // Trend Analysis
+                if (data.trend_analysis) {
+                    const trends = data.trend_analysis;
+                    html += `
+                        <div class="col-12 mb-2">
+                            <div class="alert alert-info">
+                                <strong>Performance Trends:</strong><br>
+                                <small>Work Rate: ${trends.work_rate_trend}</small><br>
+                                <small>Intensity: ${trends.intensity_trend}</small><br>
+                                <small>Fatigue: ${trends.fatigue_trend}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Predictions
+                if (data.predictions.length > 0) {
+                    const latest_pred = data.predictions[data.predictions.length - 1];
+                    html += `
+                        <div class="col-12 mb-2">
+                            <div class="alert alert-primary">
+                                <strong>Next ${data.prediction_horizon} Steps:</strong><br>
+                                <small>Work Rate: ${latest_pred.predicted_work_rate.toFixed(0)}</small><br>
+                                <small>Intensity: ${latest_pred.predicted_intensity.toFixed(1)}%</small><br>
+                                <small>Fatigue: ${latest_pred.predicted_fatigue.toFixed(2)}</small>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += '</div>';
+                predictions.innerHTML = html;
+            } else {
+                predictions.innerHTML = `
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle"></i> No prediction data available yet. 
+                        Start analysis and click "Predictions" to see performance trends and forecasts.
+                    </div>
+                `;
+            }
+        }
+        
+        function updateButtonStates(isAnalyzing) {
+            startLiveBtn.disabled = isAnalyzing;
+            uploadBtn.disabled = isAnalyzing;
+            stopAnalysisBtn.disabled = !isAnalyzing;
+            getTacticalBtn.disabled = !isAnalyzing;
+            getPerformanceBtn.disabled = !isAnalyzing;
+            getAdvancedBtn.disabled = !isAnalyzing;
+            getPredictionBtn.disabled = !isAnalyzing;
+        }
+        
+        function showStatus(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            statusMessages.appendChild(alert);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+        
+        async function uploadVideo(file) {
+            const formData = new FormData();
+            formData.append('video', file);
+            
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showStatus('Video uploaded successfully', 'success');
+                    socket.emit('start_upload_analysis', { session_id: result.session_id });
+                } else {
+                    showStatus(`Upload failed: ${result.error}`, 'danger');
+                }
+            } catch (error) {
+                showStatus(`Upload error: ${error.message}`, 'danger');
+            }
+        }
+        
+        // Initialize
+        updateButtonStates(false);
+    </script>
+</body>
+</html> 
